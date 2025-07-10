@@ -1,9 +1,10 @@
 <html>
-<header>
-<title>Moneib's Online Portfolio</title>
+<head>
+<title>minimalist_generated_portfolio_title_here</title>
 <style>
 body {
   background-color: black;
+  color:yellow;
 }
 button {
   border-style: solid;
@@ -28,6 +29,10 @@ button {
 }
 .undisplayed {
   display: none
+}
+#title_span {
+  font-size: x-large;
+  font-weight: bold;
 }
 </style>
 <script>
@@ -105,36 +110,13 @@ function ajaxCall(fileName, callback, configArr) {
 }
 ajaxCall("sections.json",addSections,["background"])
 </script>
-<div>
-site_title_banner_here
-</div>
-</header>
+<span id="logo_span"></span>
+<span id="title_span">
+portfolio_title_banner_here
+</span>
+</head>
 <body>
 <div id="background_section">
-<!--
-<div id="background_buttons">
-<button onclick="showSection('Home', this)" class="clicked">Home</button> 
-<button onclick="showSection('Artworks', this)" class="unclicked">Artworks</button>
-<button onclick="showSection('Software', this)" class="unclicked">Software</button>
-<button onclick="showSection('Writings', this)" class="unclicked">Wriitings</button>
-<button onclick="showSection('Others', this)" class="unclicked">Others</button>
-</div>
-<section id="Home" class="displayed">
-Splash Screen
-</section>
-<section id="Artworks" class="undisplayed">
-Section 1
-</section>
-<section id="Software" class="undisplayed">
-Section 2
-</section>
-<section id="Writings" class="undisplayed">
-Section 3
-</section>
-<section id="Others" class="undisplayed">
-Section 4
-</section>
--->
 </div>
 </body>
 <footer>
