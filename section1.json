@@ -1,0 +1,23 @@
+{
+  "description": "section_1_description_here",
+  "items": [
+             {
+             "name": "item_1_name",
+             "type": "text",
+             "value": "item_1_text_value",
+             "description": "item_1_description
+             },
+             {
+             "name": "item_2_name",
+             "type": "text",
+             "value": "item_2_text_value",
+             "description": "item_2_description
+             },
+             {
+             "name": "item_3_name",
+             "type": "text_file",
+             "value": "./section_1_item_3_content",
+             "description": "item_3_description
+             }
+           ];
+}

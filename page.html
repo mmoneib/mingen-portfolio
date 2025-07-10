@@ -1,0 +1,143 @@
+<html>
+<header>
+<title>Moneib's Online Portfolio</title>
+<style>
+body {
+  background-color: black;
+}
+button {
+  border-style: solid;
+  border-color: transparent;
+  background-color: gray;
+}
+.clicked {
+  border-style: solid;
+  border-color: white;
+  color: yellow;
+  font-weight: bold;
+}
+.unclicked {
+
+}
+.unclicked:hover {
+ background-color: blue;
+ transform: scale(1.1);
+}
+.displayed {
+  display: block;
+}
+.undisplayed {
+  display: none
+}
+</style>
+<script>
+function showSection(id, button) {
+  var buttons = document.getElementsByTagName("button")
+  for (i=0; i<buttons.length; i++) {
+    buttons[i].className="unclicked"
+  }
+  button.className="clicked"
+  var sections = document.getElementsByTagName("section")
+  for (i=0; i<sections.length; i++) {
+    sections[i].className="undisplayed";
+  }
+  document.getElementById(id).className="displayed";
+  // Show parents.
+  var parentElement = document.getElementById(id).parentElement;
+  while (parentElement.className == "undisplayed" || parentElement.className == "displayed") {
+    parentElement.className="displayed";
+    document.getElementById(parentElement.id+"_button").className="clicked";
+    var parentElement = parentElement.parentElement;
+  }
+  // Show children.
+}
+
+/* Creates internals of a parent section (which is already created) and includes a recursive call to further
+ * create its subsections. Recursion stops when the parent sections has no subsections within it.
+ */
+function addSectionsInternal(sectionsArr, parentName) {
+  if (typeof(sectionsArr) != "undefined" && sectionsArr.length > 0) {
+    for (var i=0; i<sectionsArr.length; i++) {
+      var parentSectionId=parentName+"_section";
+      var parentElement=document.getElementById(parentSectionId);
+      var section = sectionsArr[i];
+      if (typeof(section.name) != "undefined" && parentName != "undefined") {
+        var sectionElement = document.createElement("section");
+        sectionElement.id = section.name+"_section";
+        buttonsDivElement=document.getElementById(parentSectionId+"_buttons"); // IDs should relate to other IDs.
+        if (buttonsDivElement == null || typeof(buttonsDivElement) == "undefined") { //TODO: Check why not undefined.
+          var buttonsDivElement = document.createElement("div");
+          buttonsDivElement.id = parentSectionId+"_buttons";
+          document.getElementById(parentSectionId).appendChild(buttonsDivElement);
+        }
+        // TODO Externalize the definition and use placeholder.
+        buttonsDivElement.innerHTML+="<button id='" + sectionElement.id  + "_button' onclick='showSection(\"" + sectionElement.id + "\", this)' class='unclicked'>" + section.name + "</button>\n";  // Using innnerHtml since we won't do anything with the created object.
+        parentElement.appendChild(sectionElement);
+      }
+      addSectionsInternal(section.sections, section.name);
+    }
+  }
+}
+
+function addSections(sectionsJsonText, configArr) {
+  jsonObject = JSON.parse(sectionsJsonText);
+  parent = configArr[0]; //+"_section";
+  // TODO: Why being called twice?
+  addSectionsInternal(jsonObject.sections, parent);
+  showSection(document.getElementsByTagName("section")[0].id, document.getElementsByTagName("button")[0]); 
+}
+
+var called=false; // TODO: Temporary
+function ajaxCall(fileName, callback, configArr) {
+  xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState = XMLHttpRequest.DONE) {
+      if (xhr.responseText.length > 0) {
+        if (called == false) {
+          callback(xhr.responseText, configArr);
+        }
+        called=true;
+      }
+    }
+  };
+  xhr.open("GET", fileName, true);
+  xhr.send();
+}
+ajaxCall("sections.json",addSections,["background"])
+</script>
+<div>
+site_title_banner_here
+</div>
+</header>
+<body>
+<div id="background_section">
+<!--
+<div id="background_buttons">
+<button onclick="showSection('Home', this)" class="clicked">Home</button> 
+<button onclick="showSection('Artworks', this)" class="unclicked">Artworks</button>
+<button onclick="showSection('Software', this)" class="unclicked">Software</button>
+<button onclick="showSection('Writings', this)" class="unclicked">Wriitings</button>
+<button onclick="showSection('Others', this)" class="unclicked">Others</button>
+</div>
+<section id="Home" class="displayed">
+Splash Screen
+</section>
+<section id="Artworks" class="undisplayed">
+Section 1
+</section>
+<section id="Software" class="undisplayed">
+Section 2
+</section>
+<section id="Writings" class="undisplayed">
+Section 3
+</section>
+<section id="Others" class="undisplayed">
+Section 4
+</section>
+-->
+</div>
+</body>
+<footer>
+copy_right_information_and_disclaimer_here
+</footer>
+<html>

@@ -1,0 +1,31 @@
+{
+  "name": "background",
+  "sections": [
+    {"name": "section1",
+     "sections": []},
+    {"name": "section2",
+     "sections": [
+        {"name": "section2a"},
+        {"name": "section2b",
+         "sections": [
+              {"name": "section2ba"},
+              {"name": "section2bb"},
+              {"name": "section2bc"},
+              {"name": "section2bd"}
+            ]},
+        {"name": "section2c",
+         "sections": []},
+        {"name": "section2d"}
+      ]
+    },
+    {"name": "section3",
+     "sections": [
+       {"name": "section3a"},
+       {"name": "section3b"},
+       {"name": "section3c"},
+       {"name": "section3d"}
+     ]
+    },
+    {"name": "section4"}
+    ]
+}
