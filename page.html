@@ -4,7 +4,10 @@
 <style>
 body {
   background-color: black;
-  color:yellow;
+  color: white;
+}
+footer {
+  font-size:small;
 }
 button {
   border-style: solid;
@@ -36,6 +39,13 @@ button {
 }
 </style>
 <script>
+// TODO: Catch errors?
+function addSectionContent(contentJsonText, configArr) {
+  var jsonObject = JSON.parse(contentJsonText);
+  var sectionId=configArr[0];
+  document.getElementById(sectionId+"_content").innerHTML="<div class='description'>"+jsonObject.description+"</div>";
+}
+
 function showSection(id, button) {
   var buttons = document.getElementsByTagName("button")
   for (i=0; i<buttons.length; i++) {
@@ -47,33 +57,36 @@ function showSection(id, button) {
     sections[i].className="undisplayed";
   }
   document.getElementById(id).className="displayed";
-  // Show parents.
+   // Show parents.
   var parentElement = document.getElementById(id).parentElement;
   while (parentElement.className == "undisplayed" || parentElement.className == "displayed") {
+    document.getElementById(parentElement.id+"_content").innerHTML="";
     parentElement.className="displayed";
     document.getElementById(parentElement.id+"_button").className="clicked";
     var parentElement = parentElement.parentElement;
   }
-  // Show children.
+  // Show content.
+  ajaxCall(id+".json", addSectionContent, [id]);   
 }
 
 /* Creates internals of a parent section (which is already created) and includes a recursive call to further
  * create its subsections. Recursion stops when the parent sections has no subsections within it.
  */
-function addSectionsInternal(sectionsArr, parentName) {
-  if (typeof(sectionsArr) != "undefined" && sectionsArr.length > 0) {
+function addSectionsInternal(sectionsArr, parentSectionId) {
+  var parentElement=document.getElementById(parentSectionId);
+  var contentDivElement=document.createElement("div");
+  contentDivElement.id=parentSectionId+"_content";
+ if (typeof(sectionsArr) != "undefined" && sectionsArr.length > 0) {
     for (var i=0; i<sectionsArr.length; i++) {
-      var parentSectionId=parentName+"_section";
-      var parentElement=document.getElementById(parentSectionId);
       var section = sectionsArr[i];
-      if (typeof(section.name) != "undefined" && parentName != "undefined") {
+      if (typeof(section.name) != "undefined" && parentSectionId != "undefined") {
         var sectionElement = document.createElement("section");
-        sectionElement.id = section.name+"_section";
+        sectionElement.id = section.name; //+"_section";
         buttonsDivElement=document.getElementById(parentSectionId+"_buttons"); // IDs should relate to other IDs.
         if (buttonsDivElement == null || typeof(buttonsDivElement) == "undefined") { //TODO: Check why not undefined.
           var buttonsDivElement = document.createElement("div");
           buttonsDivElement.id = parentSectionId+"_buttons";
-          document.getElementById(parentSectionId).appendChild(buttonsDivElement);
+         document.getElementById(parentSectionId).appendChild(buttonsDivElement);
         }
         // TODO Externalize the definition and use placeholder.
         buttonsDivElement.innerHTML+="<button id='" + sectionElement.id  + "_button' onclick='showSection(\"" + sectionElement.id + "\", this)' class='unclicked'>" + section.name + "</button>\n";  // Using innnerHtml since we won't do anything with the created object.
@@ -82,11 +95,13 @@ function addSectionsInternal(sectionsArr, parentName) {
       addSectionsInternal(section.sections, section.name);
     }
   }
+//alert(parentName);
+  parentElement.appendChild(contentDivElement);
 }
 
 function addSections(sectionsJsonText, configArr) {
-  jsonObject = JSON.parse(sectionsJsonText);
-  parent = configArr[0]; //+"_section";
+  var jsonObject = JSON.parse(sectionsJsonText);
+  var parent = configArr[0]; //+"_section";
   // TODO: Why being called twice?
   addSectionsInternal(jsonObject.sections, parent);
   showSection(document.getElementsByTagName("section")[0].id, document.getElementsByTagName("button")[0]); 
@@ -101,7 +116,7 @@ function ajaxCall(fileName, callback, configArr) {
         if (called == false) {
           callback(xhr.responseText, configArr);
         }
-        called=true;
+        //called=true;
       }
     }
   };
@@ -116,10 +131,10 @@ portfolio_title_banner_here
 </span>
 </head>
 <body>
-<div id="background_section">
+<div id="background">
 </div>
 </body>
 <footer>
-copy_right_information_and_disclaimer_here
+<div>MinGen Portfolio -- by Muhammad Moneib. Licensed under the MIT License.</div>
 </footer>
 <html>

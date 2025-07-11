@@ -9,4 +9,3 @@ A minimalist, flow-oriented, easily generated portfolio of hierarchical sections
 * CSS is included in the single-page HTML to discourage over-complicated styling.
 * JavaScript is included in the single-page HTML for the same reason as above.
 * Only standard stack is used to disallow any needless dependencies.
-* No AI is used because it has a propensity to overcomplicate and fuzzify, which is against the minimalist objective here.
