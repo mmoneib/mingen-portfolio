@@ -31,7 +31,11 @@ button {
   display: block;
 }
 .undisplayed {
-  display: none
+  display: none;
+}
+.containerized {
+  bodrer-color: white;
+  border-size: 1px;
 }
 #title_span {
   font-size: x-large;
@@ -43,7 +47,20 @@ button {
 function addSectionContent(contentJsonText, configArr) {
   var jsonObject = JSON.parse(contentJsonText);
   var sectionId=configArr[0];
-  document.getElementById(sectionId+"_content").innerHTML="<div class='description'>"+jsonObject.description+"</div>";
+  var contentElement = document.getElementById(sectionId+"_content"); 
+  contentElement.innerHTML="<div class='description'>"+jsonObject.description+"</div>";
+  var itemsArr = jsonObject.items;
+  for (var i=0; i<itemsArr.length; i++) {
+    var item = itemsArr[i];
+    if (item.type == "text") {
+      var itemElement = document.createElement("div");
+      itemElement.id = "item_" + i;
+      itemElement.className = "containerized";
+      itemElement.innerHTML = "<div id='" + itemElement.id + "_name'>" + item.name  + "</div><div id='" + itemElement.id + "_value'>" + item.value + "</div><div id='" + itemElement.id + "_desc'>" + item.description + "</div>";
+      contentElement.appendChild(itemElement);
+    }
+    
+  }  
 }
 
 function showSection(id, button) {
