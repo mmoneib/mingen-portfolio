@@ -39,6 +39,7 @@ button {
   margin: 10px;
   padding: 1px;
   border-style: dotted;
+  overflow: auto;
 }
 .titled {
   font-size: large;
@@ -47,6 +48,10 @@ button {
 }
 .valued {
   font-family: monospace;
+}
+.valued > img {
+  display: block;
+  margin: auto;
 }
 .described {
   font-style: italic;
@@ -58,30 +63,48 @@ button {
 }
 </style>
 <script>
-// TODO: Catch errors?
-// TOOO: Differente visually between layers of buttons. Something hierarchical, like additional border with each step or so.
-// TODO: Display default description when nothing is found, suggesting using another section/subsection.
-// TODO: Action for displaying images.
+// TOOO: Differentiate visually between layers of buttons. Something hierarchical, like additional border with each step or so.
+// TODO: Action for displaying images as data URI.
+// TODO: Action to display images with links.
 // TODO: Action for displaying links.
 // TODO: Action for displaying mix, by translating MD.
 // TODO: Separate styles and allow choices.
 // TODO: Container actions - download, open in a new tab, request, share.
+// TODO: Add decryption of content.
+// TODO: Add paging.
+function populateItemFromTextFile(contentText, configArr) {
+  var textElementId = configArr[0];
+  var textElement = document.getElementById(textElementId);
+  textElement.innerHTML = contentText;
+}
+
 function addSectionContent(contentJsonText, configArr) {
-  var jsonObject = JSON.parse(contentJsonText);
+  try {
+    var jsonObject = JSON.parse(contentJsonText);
+  } catch(e) {
+    var jsonObject = JSON.parse("{\"description\" : \"Nothing to show for this section!\", \"items\" : \"\"}");
+  }
   var sectionId=configArr[0];
   var contentElement = document.getElementById(sectionId+"_content"); 
   contentElement.innerHTML="<div class='described'>"+jsonObject.description+"</div>";
   var itemsArr = jsonObject.items;
   for (var i=0; i<itemsArr.length; i++) {
     var item = itemsArr[i];
+    var itemElement = document.createElement("div");
+    itemElement.id = "item_" + i;
+    itemElement.className = "containerized";
+    var sectionElementIdsPrefix = sectionId + itemElement.id; 
+    // Add elements before assigning value to allow same flow for types which require async calls, lke text_file.
+    itemElement.innerHTML = "<div id='" + sectionElementIdsPrefix + "_name' class='titled'>" + item.name + "</div><div id='" + sectionElementIdsPrefix + "_value' class='valued containerized'>" + "" + "</div><div id='" + sectionElementIdsPrefix + "_desc' class='described containerized'>" + item.description + "</div>";
+    contentElement.appendChild(itemElement);
+    var valueElement = document.getElementById(sectionId + itemElement.id + "_value");
     if (item.type == "text") {
-      var itemElement = document.createElement("div");
-      itemElement.id = "item_" + i;
-      itemElement.className = "containerized";
-      itemElement.innerHTML = "<div id='" + itemElement.id + "_name' class='titled'>" + item.name  + "</div><div id='" + itemElement.id + "_value' class='valued containerized'>" + item.value + "</div><div id='" + itemElement.id + "_desc' class='described containerized'>" + item.description + "</div>";
-      contentElement.appendChild(itemElement);
+      valueElement.innerHTML = item.value;
+    } else if (item.type == "image_file" ) {
+      valueElement.innerHTML = "<img src='vault/" + item.value + "' loading='lazy'/>";
+    } else if (item.type == "text_file" ) {
+      ajaxCall("vault/" + item.value, populateItemFromTextFile, [valueElement.id]);
     }
-    
   }  
 }
 
@@ -96,7 +119,7 @@ function showSection(id, button) {
     sections[i].className="undisplayed";
   }
   document.getElementById(id).className="displayed";
-   // Show parents.
+  // Show parents.
   var parentElement = document.getElementById(id).parentElement;
   while (parentElement.className == "undisplayed" || parentElement.className == "displayed") {
     document.getElementById(parentElement.id+"_content").innerHTML="";

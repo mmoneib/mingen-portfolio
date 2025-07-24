@@ -16,7 +16,7 @@
              {
              "name": "item_3_name",
              "type": "text_file",
-             "value": "./section_1_item_3_content",
+             "value": "section_1_item_3_content",
              "description": "item_3_description"
              }
            ]
