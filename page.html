@@ -34,21 +34,43 @@ button {
   display: none;
 }
 .containerized {
-  bodrer-color: white;
-  border-size: 1px;
+  border-color: white;
+  border: 2px;
+  margin: 10px;
+  padding: 1px;
+  border-style: dotted;
+}
+.titled {
+  font-size: large;
+  font-weight: bold;
+  font-family: cursive;
+}
+.valued {
+  font-family: monospace;
+}
+.described {
+  font-style: italic;
 }
 #title_span {
   font-size: x-large;
   font-weight: bold;
+  font-family: cursive;
 }
 </style>
 <script>
 // TODO: Catch errors?
+// TOOO: Differente visually between layers of buttons. Something hierarchical, like additional border with each step or so.
+// TODO: Display default description when nothing is found, suggesting using another section/subsection.
+// TODO: Action for displaying images.
+// TODO: Action for displaying links.
+// TODO: Action for displaying mix, by translating MD.
+// TODO: Separate styles and allow choices.
+// TODO: Container actions - download, open in a new tab, request, share.
 function addSectionContent(contentJsonText, configArr) {
   var jsonObject = JSON.parse(contentJsonText);
   var sectionId=configArr[0];
   var contentElement = document.getElementById(sectionId+"_content"); 
-  contentElement.innerHTML="<div class='description'>"+jsonObject.description+"</div>";
+  contentElement.innerHTML="<div class='described'>"+jsonObject.description+"</div>";
   var itemsArr = jsonObject.items;
   for (var i=0; i<itemsArr.length; i++) {
     var item = itemsArr[i];
@@ -56,7 +78,7 @@ function addSectionContent(contentJsonText, configArr) {
       var itemElement = document.createElement("div");
       itemElement.id = "item_" + i;
       itemElement.className = "containerized";
-      itemElement.innerHTML = "<div id='" + itemElement.id + "_name'>" + item.name  + "</div><div id='" + itemElement.id + "_value'>" + item.value + "</div><div id='" + itemElement.id + "_desc'>" + item.description + "</div>";
+      itemElement.innerHTML = "<div id='" + itemElement.id + "_name' class='titled'>" + item.name  + "</div><div id='" + itemElement.id + "_value' class='valued containerized'>" + item.value + "</div><div id='" + itemElement.id + "_desc' class='described containerized'>" + item.description + "</div>";
       contentElement.appendChild(itemElement);
     }
     
