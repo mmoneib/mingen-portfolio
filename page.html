@@ -7,7 +7,7 @@ body {
   color: white;
 }
 footer {
-  font-size:small;
+  font-size: 0.75em;
 }
 button {
   border-style: solid;
@@ -42,7 +42,7 @@ button {
   overflow: auto;
 }
 .titled {
-  font-size: large;
+  font-size: 1.5em;
   font-weight: bold;
   font-family: cursive;
 }
@@ -56,10 +56,25 @@ button {
 .described {
   font-style: italic;
 }
+.structured {
+  padding: 0.5vh;
+}
 #title_span {
-  font-size: x-large;
+  font-size: 2.5em;
   font-weight: bold;
   font-family: cursive;
+}
+@media (orientation: portrait) {
+  #title_span {
+    font-size: 5em;
+  }
+  button {
+    width: 100%;
+    font-size: 3em;
+  }
+  .titled {
+    font-size: 3em;
+  }
 }
 </style>
 <script>
@@ -152,7 +167,8 @@ function addSectionsInternal(sectionsArr, parentSectionId) {
         if (buttonsDivElement == null || typeof(buttonsDivElement) == "undefined") { //TODO: Check why not undefined.
           var buttonsDivElement = document.createElement("div");
           buttonsDivElement.id = parentSectionId+"_buttons";
-         document.getElementById(parentSectionId).appendChild(buttonsDivElement);
+          buttonsDivElement.className = "structured";
+          document.getElementById(parentSectionId).appendChild(buttonsDivElement);
         }
         // TODO Externalize the definition and use placeholder.
         buttonsDivElement.innerHTML+="<button id='" + sectionElement.id  + "_button' onclick='showSection(\"" + sectionElement.id + "\", this)' class='unclicked'>" + section.name + "</button>\n";  // Using innnerHtml since we won't do anything with the created object.
