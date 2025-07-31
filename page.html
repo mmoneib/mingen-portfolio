@@ -8,11 +8,6 @@ body {
 }
 footer {
   font-size: 0.75em;
-  margin-top: 1vh;
-  padding-top: 2vh;
-  border-top: white;
-  border-top-width: 1px;
-  border-top-style: solid;
 }
 button {
   border-style: solid;
@@ -64,10 +59,18 @@ button {
 .structured {
   padding: 0.5vh;
 }
+.separated {
+  margin-top: 1vh;
+  padding-top: 1vh;
+  border-top: yellow;
+  border-top-width: 1px;
+  border-top-style: solid;
+}
 #title_span {
   font-size: 2.5em;
   font-weight: bold;
   font-family: cursive;
+  color: yellow
 }
 @media (orientation: portrait) {
   #title_span {
@@ -101,7 +104,6 @@ button {
 // TODO: Container actions - download, open in a new tab, request, share.
 // TODO: Add decryption of content.
 // TODO: Add paging.
-// TODO: Separat CSS into a different file.
 // TODO: Fix issue with (sub)sections having same name. Prefix with parent?
 // TODO: Make Vault's structure as folder per section.
 // TODO: Avoid possibility of script injection when using innerHTML.
@@ -119,7 +121,7 @@ function addSectionContent(contentJsonText, configArr) {
   }
   var sectionId=configArr[0];
   var contentElement = document.getElementById(sectionId+"_content"); 
-  contentElement.innerHTML="<div class='described'>"+jsonObject.description+"</div>";
+  contentElement.innerHTML="<div class='described separated'>"+jsonObject.description+"</div>";
   var itemsArr = jsonObject.items;
   for (var i=0; i<itemsArr.length; i++) {
     var item = itemsArr[i];
@@ -230,7 +232,7 @@ portfolio_title_banner_here
 <div id="background">
 </div>
 </body>
-<footer>
+<footer class="separated">
 <div>MinGen Portfolio -- by Muhammad Moneib. Licensed under the MIT License.</div>
 </footer>
 <html>
