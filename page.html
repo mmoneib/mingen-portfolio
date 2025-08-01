@@ -30,8 +30,16 @@ button {
 .displayed {
   display: block;
 }
-.undisplayed {
+/* Of other sections than the active ancestry. */
+.undisplayed { 
   display: none;
+}
+/* Of interface elements related to other sections than the active one.  */
+.focused {
+  opacity: 1;
+}
+.unfocused { 
+  opacity: 0.75;
 }
 .containerized {
   border-color: white;
@@ -95,7 +103,6 @@ button {
 }
 </style>
 <script>
-// TOOO: Differentiate visually between layers of buttons. Something hierarchical, like additional border with each step or so.
 // TODO: Action for displaying images as data URI.
 // TODO: Action to display images with links.
 // TODO: Action for displaying links.
@@ -148,9 +155,11 @@ function addSectionContent(contentJsonText, configArr) {
 function showSection(id, button) {
   var buttons = document.getElementsByTagName("button")
   for (i=0; i<buttons.length; i++) {
-    buttons[i].className="unclicked"
+    buttons[i].className="unclicked";
   }
-  button.className="clicked"
+  button.className="clicked";
+  button.parentElement.classList.remove("unfocused");
+  button.parentElement.classList.add("focused");
   var sections = document.getElementsByTagName("section")
   for (i=0; i<sections.length; i++) {
     sections[i].className="undisplayed";
@@ -162,8 +171,10 @@ function showSection(id, button) {
     document.getElementById(parentElement.id+"_content").innerText="";
     parentElement.className="displayed";
     document.getElementById(parentElement.id+"_button").className="clicked";
+    document.getElementById(parentElement.id+"_button").parentElement.classList.add("unfocused");
+    document.getElementById(parentElement.id+"_button").parentElement.classList.add("unfocused");
     var parentElement = parentElement.parentElement;
-  }
+ }
   // Show content.
   ajaxCall(id+".json", addSectionContent, [id]);   
 }
