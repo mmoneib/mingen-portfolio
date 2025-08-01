@@ -70,7 +70,7 @@ button {
   font-size: 2.5em;
   font-weight: bold;
   font-family: cursive;
-  color: yellow
+  color: yellow;
 }
 @media (orientation: portrait) {
   #title_span {
@@ -110,7 +110,7 @@ button {
 function populateItemFromTextFile(contentText, configArr) {
   var textElementId = configArr[0];
   var textElement = document.getElementById(textElementId);
-  textElement.innerHTML = contentText;
+  textElement.innerText = contentText;
 }
 
 function addSectionContent(contentJsonText, configArr) {
@@ -121,6 +121,7 @@ function addSectionContent(contentJsonText, configArr) {
   }
   var sectionId=configArr[0];
   var contentElement = document.getElementById(sectionId+"_content"); 
+  //TODO Use innerText.
   contentElement.innerHTML="<div class='described separated'>"+jsonObject.description+"</div>";
   var itemsArr = jsonObject.items;
   for (var i=0; i<itemsArr.length; i++) {
@@ -134,8 +135,9 @@ function addSectionContent(contentJsonText, configArr) {
     contentElement.appendChild(itemElement);
     var valueElement = document.getElementById(sectionId + itemElement.id + "_value");
     if (item.type == "text") {
-      valueElement.innerHTML = item.value;
+      valueElement.innerText = item.value;
     } else if (item.type == "image_file" ) {
+      // TODO: Create element without innerHTML.
       valueElement.innerHTML = "<img src='vault/" + item.value + "' loading='lazy'/>";
     } else if (item.type == "text_file" ) {
       ajaxCall("vault/" + item.value, populateItemFromTextFile, [valueElement.id]);
@@ -157,7 +159,7 @@ function showSection(id, button) {
   // Show parents.
   var parentElement = document.getElementById(id).parentElement;
   while (parentElement.className == "undisplayed" || parentElement.className == "displayed") {
-    document.getElementById(parentElement.id+"_content").innerHTML="";
+    document.getElementById(parentElement.id+"_content").innerText="";
     parentElement.className="displayed";
     document.getElementById(parentElement.id+"_button").className="clicked";
     var parentElement = parentElement.parentElement;
@@ -187,7 +189,8 @@ function addSectionsInternal(sectionsArr, parentSectionId) {
           document.getElementById(parentSectionId).appendChild(buttonsDivElement);
         }
         // TODO Externalize the definition and use placeholder.
-        buttonsDivElement.innerHTML+="<button id='" + sectionElement.id  + "_button' onclick='showSection(\"" + sectionElement.id + "\", this)' class='unclicked'>" + section.name + "</button>\n";  // Using innnerHtml since we won't do anything with the created object.
+        // TODO Create elements without innerHTML
+        buttonsDivElement.innerHTML+="<button id='" + sectionElement.id  + "_button' onclick='showSection(\"" + sectionElement.id + "\", this)' class='unclicked'>" + section.name + "</button>\n";
         parentElement.appendChild(sectionElement);
       }
       addSectionsInternal(section.sections, section.name);
