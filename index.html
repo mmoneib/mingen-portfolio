@@ -74,15 +74,39 @@ button {
   border-top-width: 1px;
   border-top-style: solid;
 }
-#title_span {
+.fixed {
+  position: fixed;
+  right: 4vw;
+  top: 2vw;
+}
+#banner {
   font-size: 2.5em;
   font-weight: bold;
   font-family: cursive;
+ }
+#title_span {
   color: yellow;
+}
+#logo_span {
+  color: white;
+  cursor: hand;
+}
+#logo_menu_span {
+ border: 2px;
+ border-style: solid;
+ border-color: yellow;
+ background-color: black;
+ position: inherit;
+ padding: 1vw;
+ text-align: center;
 }
 @media (orientation: portrait) {
   #title_span {
     font-size: 5em;
+  }
+  #logo_span {
+    font-size: 5em;
+    curosr: hand;
   }
   body {
     font-size: 1em;
@@ -114,6 +138,23 @@ button {
 // TODO: Fix issue with (sub)sections having same name. Prefix with parent?
 // TODO: Make Vault's structure as folder per section.
 // TODO: Avoid possibility of script injection when using innerHTML.
+function toggleMenu() {
+  var menu = document.getElementById("logo_menu_span");
+  if (menu.className == "undisplayed") {
+    menu.className = "displayed";
+  } else {
+    menu.className = "undisplayed";
+  }
+}
+
+function checkBannerVisibility() {
+  if (document.getElementById('banner').getBoundingClientRect().bottom<0) {
+    document.getElementById("logo_span").className="fixed";
+  } else {
+    document.getElementById("logo_span").className="";
+  }
+}
+
 function populateItemFromTextFile(contentText, configArr) {
   var textElementId = configArr[0];
   var textElement = document.getElementById(textElementId);
@@ -127,6 +168,11 @@ function addSectionContent(contentJsonText, configArr) {
     var jsonObject = JSON.parse("{\"description\" : \"Nothing to show for this section!\", \"items\" : \"\"}");
   }
   var sectionId=configArr[0];
+  var buttonsElement = document.getElementById(sectionId+"_buttons");
+  if (buttonsElement != null) {
+    buttonsElement.classList.remove("unfocused");
+    buttonsElement.classList.add("focused");
+  }
   var contentElement = document.getElementById(sectionId+"_content"); 
   //TODO Use innerText.
   contentElement.innerHTML="<div class='described separated'>"+jsonObject.description+"</div>";
@@ -237,16 +283,27 @@ function ajaxCall(fileName, callback, configArr) {
 }
 ajaxCall("sections.json",addSections,["background"])
 </script>
-<span id="logo_span"></span>
+<div id="banner">
 <span id="title_span">
 portfolio_title_banner_here
 </span>
+<span id="logo_span" onclick="toggleMenu()">
+*
+<span id="logo_menu_span" class="undisplayed">
+<span onclick="window.scrollTo(0,0)">&#8679;</span>
+<span>&#8678;</span>
+<span>&#8634;</span>
+<span>&#120164;</span>
+</span>
+</span>
+</div>
 </head>
-<body>
+<body onscroll="checkBannerVisibility()">
 <div id="background">
 </div>
 </body>
 <footer class="separated">
 <div>MinGen Portfolio -- by Muhammad Moneib. Licensed under the MIT License.</div>
+<a/>
 </footer>
 <html>
