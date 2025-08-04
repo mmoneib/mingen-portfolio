@@ -90,15 +90,21 @@ button {
 #logo_span {
   color: white;
   cursor: hand;
-}
+  display: inline-flex;
+  height: 1em;
+  position: fixed;
+  right: 0;
+ }
 #logo_menu_span {
  border: 2px;
  border-style: solid;
  border-color: yellow;
  background-color: black;
- position: inherit;
- padding: 1vw;
+ position: absolute;
  text-align: center;
+ top: 1em;
+ right: 0;
+ width: 1em;
 }
 @media (orientation: portrait) {
   #title_span {
@@ -107,7 +113,7 @@ button {
   #logo_span {
     font-size: 5em;
     curosr: hand;
-  }
+ }
   body {
     font-size: 1em;
   }
@@ -287,15 +293,15 @@ ajaxCall("sections.json",addSections,["background"])
 <span id="title_span">
 portfolio_title_banner_here
 </span>
-<span id="logo_span" onclick="toggleMenu()">
-*
-<span id="logo_menu_span" class="undisplayed">
+<div id="logo_span" onclick="toggleMenu()">
+<div id="logo_menu_span" class="undisplayed">
 <span onclick="window.scrollTo(0,0)">&#8679;</span>
 <span>&#8678;</span>
 <span>&#8634;</span>
 <span>&#120164;</span>
-</span>
-</span>
+</div>
+<img src="logo.svg"/>
+</div>
 </div>
 </head>
 <body onscroll="checkBannerVisibility()">
