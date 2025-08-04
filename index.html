@@ -74,8 +74,10 @@ button {
   border-top-width: 1px;
   border-top-style: solid;
 }
-.fixed {
-  position: fixed;
+.docked_menu {
+  right: 0;
+}
+.floated_menu {
   right: 4vw;
   top: 2vw;
 }
@@ -87,15 +89,14 @@ button {
 #title_span {
   color: yellow;
 }
-#logo_span {
+#menu {
   color: white;
   cursor: hand;
   display: inline-flex;
   height: 1em;
   position: fixed;
-  right: 0;
  }
-#logo_menu_span {
+#menu_context {
  border: 2px;
  border-style: solid;
  border-color: yellow;
@@ -110,7 +111,7 @@ button {
   #title_span {
     font-size: 5em;
   }
-  #logo_span {
+  #menu {
     font-size: 5em;
     curosr: hand;
  }
@@ -141,11 +142,10 @@ button {
 // TODO: Container actions - download, open in a new tab, request, share.
 // TODO: Add decryption of content.
 // TODO: Add paging.
-// TODO: Fix issue with (sub)sections having same name. Prefix with parent?
 // TODO: Make Vault's structure as folder per section.
 // TODO: Avoid possibility of script injection when using innerHTML.
 function toggleMenu() {
-  var menu = document.getElementById("logo_menu_span");
+  var menu = document.getElementById("menu_context");
   if (menu.className == "undisplayed") {
     menu.className = "displayed";
   } else {
@@ -155,9 +155,9 @@ function toggleMenu() {
 
 function checkBannerVisibility() {
   if (document.getElementById('banner').getBoundingClientRect().bottom<0) {
-    document.getElementById("logo_span").className="fixed";
+    document.getElementById("menu").className="floated_menu";
   } else {
-    document.getElementById("logo_span").className="";
+    document.getElementById("menu").className="docked_menu";
   }
 }
 
@@ -293,8 +293,8 @@ ajaxCall("sections.json",addSections,["background"])
 <span id="title_span">
 portfolio_title_banner_here
 </span>
-<div id="logo_span" onclick="toggleMenu()">
-<div id="logo_menu_span" class="undisplayed">
+<div id="menu" class="docked_menu" onclick="toggleMenu()">
+<div id="menu_context" class="undisplayed">
 <span onclick="window.scrollTo(0,0)">&#8679;</span>
 <span>&#8678;</span>
 <span>&#8634;</span>
