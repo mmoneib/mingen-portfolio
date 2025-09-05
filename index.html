@@ -324,7 +324,6 @@ function addSectionsInternal(sectionsArr, parentSectionId) {
       addSectionsInternal(section.sections, section.name);
     }
   }
-//alert(parentName);
   parentElement.appendChild(contentDivElement);
 }
 
@@ -336,16 +335,18 @@ function addSections(sectionsJsonText, configArr) {
   showSection(document.getElementsByTagName("section")[0].id, document.getElementsByTagName("button")[0]); 
 }
 
-var called=false; // TODO: Temporary
+previousCalls=new Set();
 function ajaxCall(fileName, callback, configArr) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState = XMLHttpRequest.DONE) {
       if (xhr.responseText.length > 0) {
-        if (called == false) {
-          callback(xhr.responseText, configArr);
+        if (previousCalls.has(fileName)) { // Avoid duplicate calls which happen consistently.
+          return;
+        } else {
+          previousCalls.add(fileName);
         }
-       // called=true;
+        callback(xhr.responseText, configArr);
       }
     }
   };
