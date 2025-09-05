@@ -9,8 +9,8 @@
              },
              {
              "name": "item_2_name",
-             "type": "text",
-             "value": "item_2_text_value",
+             "type": "md_file",
+             "value": "section_1_item_2_content.md",
              "description": "item_2_description"
              },
              {

@@ -167,6 +167,59 @@ function checkBannerVisibility() {
   }
 }
 
+function populateItemFromMdFile(contentText, configArr) {
+  var lines = contentText.split('\n');
+  var output="";
+  var envTag="";
+  for (var i=0; i<lines.length; i++) {
+    if (lines[i].startsWith("# ")) {
+      if (envTag != "") {
+        output+=envTag;
+        envTag=""
+       }
+       output+="<h2>" + lines[i].replace(/^# /, "") + "</h2>";
+    } else if (lines[i].startsWith("## ")) {
+      if (envTag != "") {
+        output+=envTag;
+        envTag=""
+       }
+      output+="<h3>" + lines[i].replace(/^## /, "") + "</h3>";
+    } else if (lines[i].startsWith("### ")) {
+      if (envTag != "") {
+        output+=envTag;
+        envTag=""
+       }
+      output+="<h4>" + lines[i].replace(/^### /, "") + "</h4>";
+    } else if (lines[i].startsWith("* ")) {
+      if (envTag != "" && envTag != "</ul>") {
+        output+=envTag;
+        envTag=""
+       }
+      if (envTag == "") {
+        envTag="</ul>";
+        output+="<ul>\n";
+      }
+      output+="<li>" + lines[i].replace(/^\* /, "") + "</li>";
+    } else if (lines[i].startsWith("1. ")) {
+      if (envTag != "" && envTag != "</ol>") {
+        output+=envTag;
+        envTag=""
+       }
+      if (envTag == "") {
+        envTag="</ol>";
+        output+="<ol>\n";
+      }
+      output+="<li>" + lines[i].replace(/^1\. /, "") + "</li>";
+    } else {
+      output+=lines[i];
+      output+="<br>";
+    }
+ }
+  var textElementId = configArr[0];
+  var textElement = document.getElementById(textElementId);
+  textElement.innerHTML = output;
+}
+
 function populateItemFromTextFile(contentText, configArr) {
   var textElementId = configArr[0];
   var textElement = document.getElementById(textElementId);
@@ -192,7 +245,7 @@ function addSectionContent(contentJsonText, configArr) {
   for (var i=0; i<itemsArr.length; i++) {
     var item = itemsArr[i];
     var itemElement = document.createElement("div");
-    itemElement.id = "item_" + i;
+    itemElement.id = "item_" + (i+1);
     itemElement.className = "containerized";
     var sectionElementIdsPrefix = sectionId + itemElement.id; 
     // Add elements before assigning value to allow same flow for types which require async calls, lke text_file.
@@ -206,7 +259,10 @@ function addSectionContent(contentJsonText, configArr) {
       valueElement.innerHTML = "<img src='vault/" + item.value + "' loading='lazy'/>";
     } else if (item.type == "text_file" ) {
       ajaxCall("vault/" + item.value, populateItemFromTextFile, [valueElement.id]);
+    } else if (item.type == "md_file" ) {
+      ajaxCall("vault/" + item.value, populateItemFromMdFile, [valueElement.id]);
     }
+
   }  
 }
 
@@ -282,14 +338,14 @@ function addSections(sectionsJsonText, configArr) {
 
 var called=false; // TODO: Temporary
 function ajaxCall(fileName, callback, configArr) {
-  xhr = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState = XMLHttpRequest.DONE) {
       if (xhr.responseText.length > 0) {
         if (called == false) {
           callback(xhr.responseText, configArr);
         }
-        //called=true;
+       // called=true;
       }
     }
   };
