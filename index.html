@@ -172,6 +172,7 @@ function populateItemFromMdFile(contentText, configArr) {
   var output="";
   var envTag="";
   for (var i=0; i<lines.length; i++) {
+    lines[i]=lines[i].replace(/([ |^])__/, "$1<b>").replace(/__([ |.|$])/ ,"</b>$1").replace(/([ |^])_/, "$1<i>").replace(/_([ |.|$])/,"</i> ");
     if (lines[i].startsWith("# ")) {
       if (envTag != "") {
         output+=envTag;

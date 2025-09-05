@@ -12,4 +12,4 @@ That should be deep enough for now, because:
 1. Things can become too complex.
 1. Things can evolve later.
 ## Back one level up
-A text may also  hav something _italic_ or in __bold__.
+A text may also have something _italic_ or in __bold__.
