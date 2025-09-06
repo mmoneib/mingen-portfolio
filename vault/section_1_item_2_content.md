@@ -2,14 +2,17 @@
 Introduction paragraph here.
 
 There can also be other paragraphs with gaps in between.
-## Sub-Tiles are also important
-Sub-introductions?
-What about bullet points?
-* Like this one?
-* Or this one?
-### And another level down?
-That should be deep enough for now, because:
-1. Things can become too complex.
-1. Things can evolve later.
-## Back one level up
-A text may also have something _italic_ or in __bold__.
+## Chapter Title Here
+Chapter introduction here.
+Bullet pints below:
+- One bullet point.
+- Another bullet point.
+### Section Title Here
+Section introduction here.
+
+Numbered list below:
+1. First element.
+4. Second element with gap in numbers.
+3. Third element with a retrograde number. For MarkDown, the order in the document, rather than the number itself, matters.
+## Another Chapter Title Here
+A text may also have something *italic* or in **bold**.

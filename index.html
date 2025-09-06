@@ -172,26 +172,22 @@ function populateItemFromMdFile(contentText, configArr) {
   var output="";
   var envTag="";
   for (var i=0; i<lines.length; i++) {
-    lines[i]=lines[i].replace(/([ |^])__/, "$1<b>").replace(/__([ |.|$])/ ,"</b>$1").replace(/([ |^])_/, "$1<i>").replace(/_([ |.|$])/,"</i> ");
-    if (lines[i].startsWith("# ")) {
+    // Replace placeholders for italics and bolds.
+    // TODO: Support mixes and inwords.
+    lines[i]=lines[i].replace(/([ |^])\*\*/, "$1<b>").replace(/\*\*([ |.|$])/ ,"</b>$1").replace(/([ |^])\*/, "$1<i>").replace(/\*([ |.|$])/,"</i> ");
+    if (lines[i].startsWith("# ") || lines[i].startsWith("## ") ||lines[i].startsWith("### ")) { // Close open tags before new headings.
       if (envTag != "") {
         output+=envTag;
         envTag=""
        }
+    }
+    if (lines[i].startsWith("# ")) {
        output+="<h2>" + lines[i].replace(/^# /, "") + "</h2>";
     } else if (lines[i].startsWith("## ")) {
-      if (envTag != "") {
-        output+=envTag;
-        envTag=""
-       }
       output+="<h3>" + lines[i].replace(/^## /, "") + "</h3>";
     } else if (lines[i].startsWith("### ")) {
-      if (envTag != "") {
-        output+=envTag;
-        envTag=""
-       }
       output+="<h4>" + lines[i].replace(/^### /, "") + "</h4>";
-    } else if (lines[i].startsWith("* ")) {
+    } else if (lines[i].startsWith("- ")) {
       if (envTag != "" && envTag != "</ul>") {
         output+=envTag;
         envTag=""
@@ -200,8 +196,8 @@ function populateItemFromMdFile(contentText, configArr) {
         envTag="</ul>";
         output+="<ul>\n";
       }
-      output+="<li>" + lines[i].replace(/^\* /, "") + "</li>";
-    } else if (lines[i].startsWith("1. ")) {
+      output+="<li>" + lines[i].replace(/^\- /, "") + "</li>";
+    } else if (lines[i].match(/^[1-9]\. /)) {
       if (envTag != "" && envTag != "</ol>") {
         output+=envTag;
         envTag=""
@@ -210,7 +206,7 @@ function populateItemFromMdFile(contentText, configArr) {
         envTag="</ol>";
         output+="<ol>\n";
       }
-      output+="<li>" + lines[i].replace(/^1\. /, "") + "</li>";
+      output+="<li>" + lines[i].replace(/^[1-9]\. /, "") + "</li>";
     } else {
       output+=lines[i];
       output+="<br>";
@@ -240,6 +236,7 @@ function addSectionContent(contentJsonText, configArr) {
     buttonsElement.classList.add("focused");
   }
   var contentElement = document.getElementById(sectionId+"_content"); 
+  contentElement.className = "displayed";
   //TODO Use innerText.
   contentElement.innerHTML="<div class='described separated'>"+jsonObject.description+"</div>";
   var itemsArr = jsonObject.items;
@@ -281,11 +278,12 @@ function showSection(id, button) {
   for (i=0; i<sections.length; i++) {
     sections[i].className="undisplayed";
   }
-  document.getElementById(id).className="displayed";
+  document.getElementById(id).className="displayed"; // Also necessary to show children.
+  document.getElementById(id+"_content").className="displayed"; // Since it can be undisplayed wheb a child is active.
   // Show parents.
   var parentElement = document.getElementById(id).parentElement;
   while (parentElement.className == "undisplayed" || parentElement.className == "displayed") {
-    document.getElementById(parentElement.id+"_content").innerText="";
+    document.getElementById(parentElement.id+"_content").className= "undisplayed";
     parentElement.className="displayed";
     document.getElementById(parentElement.id+"_button").classList.add("clicked");
     document.getElementById(parentElement.id+"_button").classList.remove("unclicked");
@@ -304,6 +302,7 @@ function addSectionsInternal(sectionsArr, parentSectionId) {
   var parentElement=document.getElementById(parentSectionId);
   var contentDivElement=document.createElement("div");
   contentDivElement.id=parentSectionId+"_content";
+contentDivElement.className="displayed";
  if (typeof(sectionsArr) != "undefined" && sectionsArr.length > 0) {
     for (var i=0; i<sectionsArr.length; i++) {
       var section = sectionsArr[i];
@@ -342,7 +341,7 @@ function ajaxCall(fileName, callback, configArr) {
   xhr.onreadystatechange = function() {
     if (xhr.readyState = XMLHttpRequest.DONE) {
       if (xhr.responseText.length > 0) {
-        if (previousCalls.has(fileName)) { // Avoid duplicate calls which happen consistently.
+        if (previousCalls.has(fileName)) { // Avoid duplicate calls which happen consistently; also cache content till next reload.
           return;
         } else {
           previousCalls.add(fileName);
