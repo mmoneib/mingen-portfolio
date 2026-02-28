@@ -1,0 +1,137 @@
+body {
+  background-color: black;
+  color: white;
+}
+footer {
+  font-size: 0.75em;
+}
+button {
+  border-style: solid;
+  border-color: transparent;
+  background-color: gray;
+}
+.clicked {
+  border-style: solid;
+  border-color: white;
+  color: yellow;
+  font-weight: bold;
+}
+.unclicked {
+
+}
+.unclicked:hover {
+ background-color: blue;
+ transform: scale(1.1);
+}
+.displayed {
+  display: block;
+}
+/* Of other sections than the active ancestry. */
+.undisplayed { 
+  display: none;
+}
+/* Of interface elements related to other sections than the active one.  */
+.focused {
+  opacity: 1;
+}
+.unfocused { 
+  opacity: 0.75;
+}
+.containerized {
+  border-color: white;
+  border: 2px;
+  margin: 10px;
+  padding: 1px;
+  border-style: dotted;
+  overflow: auto;
+}
+.titled {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: cursive;
+  color: yellow;
+}
+.valued {
+  font-family: monospace;
+}
+.valued > img {
+  display: block;
+  margin: auto;
+}
+.described {
+  font-style: italic;
+}
+.structured {
+  padding: 0.5vh;
+}
+.separated {
+  margin-top: 1vh;
+  padding-top: 1vh;
+  border-top: transparent;
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+.docked_menu {
+  right: 0;
+  flow: right;
+}
+.floated_menu {
+  right: 4vw;
+  top: 2vw;
+}
+#banner {
+  font-size: 2.5em;
+  font-weight: bold;
+  font-family: cursive;
+  position: relative; /* Needed for z-index. */
+  z-index: 1; /* Needed for overcoming other's opacity. */
+ }
+#title_span {
+  color: yellow;
+  overflow-wrap: break-word;
+  width: 75%; /* To lower the probability of overlapping with the logo. */
+  display: inline-block; /* To allow for setting the width and let the logo take the empty space. */
+}
+#menu {
+  color: white;
+  cursor: hand;
+  display: inline-flex;
+  height: 1em;
+  position: fixed;
+ }
+#menu_context {
+ border: 2px;
+ border-style: solid;
+ border-color: yellow;
+ background-color: black;
+ position: absolute;
+ text-align: center;
+ top: 1em;
+ right: 0;
+ width: 1em;
+}
+@media (orientation: portrait) {
+  #title_span {
+    font-size: 4em;
+  }
+  #menu {
+    font-size: 4em;
+  }
+  body {
+    font-size: 1em;
+  }
+  button {
+    width: 100%;
+    font-size: 3em;
+  }
+  .titled {
+    font-size: 3em;
+  }
+  .described {
+    font-size: 2em;
+  }
+  .valued {
+    font-size: 2em;
+  }
+}
+
